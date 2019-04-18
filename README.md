@@ -7,11 +7,11 @@ The main usecase is to ssh to a Linux HyperV VM from Windows through HyperV VMBu
 
 On the Linux VM, use `socat` to forward VMBus socket to sshd TCP socket:
 
-    socat SOCKET-LISTEN:40:0:x0000x16000000xffffffffx00000000,reuseaddr,fork TCP:localhost:22
+    socat -b65536 -lm SOCKET-LISTEN:40:0:x0000x16000000xffffffffx00000000,reuseaddr,fork TCP:localhost:22
 
 On the Windows host, run this script in the background (do not forget to update the 1st line with the name of the VM you want to connect to):
 
-    powershell.exe -command 'start-process -windowstyle hidden -verb runas "powershell.exe" -argumentlist "-executionpolicy remotesigned -F hvnc.ps1"'
+    powershell.exe -command 'start-process -windowstyle hidden -verb runas "powershell.exe" -argumentlist "-executionpolicy remotesigned -F hvnc.ps1 -VM <VM id>"'
 
 You can now ssh to your guest Linux VM from Windows by connecting to localhost:2222:
 
@@ -26,4 +26,4 @@ The VMBus socket is not impacted by the VPN network configuration and I can ssh 
 
 ## Performance
 
-It seems that performance is higher than plain TCP over hvnet (HyperV para-virtualized networking interface): my simple non-representative benchmark gave me ~30GB/s using TCP-VMBus-TCP vs ~20GB/s for plain TCP.
+It seems that performance is higher than plain TCP over hvnet (HyperV para-virtualized networking interface): my simple non-representative benchmark gave me ~30MB/s using TCP-VMBus-TCP vs ~20MB/s for plain TCP (maybe thanks to higher MTU?).

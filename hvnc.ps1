@@ -1,6 +1,6 @@
 # HyperV VM name
 # you can get them using eg. 'hvc list'
-$VM = "ubuntu_default_1547643175928_33076"
+param([string]$VM="*")
 
 # HyperV socket endpoint
 # https://docs.microsoft.com/en-us/dotnet/api/system.net.endpoint?view=netframework-4.7.2
